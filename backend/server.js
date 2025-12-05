@@ -10,6 +10,9 @@ app.get('/', (req, res)=>{
     res.send('Application is running in the backend')
 })
 
+app.use('/api/products', require('./routes/productRoutes'));
+
+
 app.use((err, req , res, next)=>{
     console.error(err.message)
     res.status(500).json({message: err.message || 'Internal server error'})
