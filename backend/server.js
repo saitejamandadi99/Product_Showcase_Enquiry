@@ -11,6 +11,7 @@ app.get('/', (req, res)=>{
 })
 
 app.use('/api/products', require('./routes/productRoutes'));
+app.use('/api/enquiries', require('./routes/enquiriesRoutes'))
 
 
 app.use((err, req , res, next)=>{
