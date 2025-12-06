@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
 import axios from 'axios'
+import ProductCard from '../../components/ProductsCard/ProductCard.jsx'
 import './mainpage.css'
 
 const MainPage = () =>{
@@ -17,7 +18,7 @@ const MainPage = () =>{
 
             const url = `${process.env.REACT_APP_API_URL}/api/products?search=${search}&category=${category}&page=1&limit=10`
             const response = await axios.get(url)
-            setSuccess(response.data.message)
+            setSuccess("Products fetched successfully")
             setProductList(response.data.products)
             setError('')
             
@@ -38,7 +39,14 @@ const MainPage = () =>{
             {productList.length === 0? (
                <p>No products found</p> 
             ):(
-                <p>getting the details of the product</p>
+                <ul>
+                    {
+                        productList.map(eachProduct=>(
+                            <ProductCard key={eachProduct.id} productDetails={eachProduct} />
+                        ))
+                    }    
+
+                </ul>
             )}
             {success && <p>{success}</p>}
             {error && <p>{error}</p>}
