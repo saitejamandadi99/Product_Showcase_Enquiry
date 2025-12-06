@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect,useNavigate } from "react"
 import axios from 'axios'
 import ProductCard from '../../components/ProductsCard/ProductCard.jsx'
 import './mainpage.css'
@@ -11,6 +11,11 @@ const MainPage = () =>{
     const [search,setSearch] = useState('')
     const [category, setCategory] = useState('')
     const [isLoading, setIsLoading] = useState(false)
+    const navigate  = useNavigate()
+    
+    const handleViewDetails = (id)=>{
+        navigate(`/products/:${id}`)
+    }
 
     const getProductsList = async ()=>{
         setIsLoading(true)
@@ -33,23 +38,54 @@ const MainPage = () =>{
 
     useEffect(()=>{
         getProductsList()
-    },[]) //runs single time only
-    return(
-        <div className="mainContainer">
+    },[search,category]) 
+
+    const renderProducts = () =>{
+        return(
+            <>
             {productList.length === 0? (
                <p>No products found</p> 
             ):(
+                <>
+                <div className="filter-container">
+                    <label htmlFor="searchInput">Search</label>
+                     <input value = {search} type='search' id='searchInput' onChange={e=>setSearch(e.target.value)} />
+                     <select value={category} onChange={e=>setCategory(e.target.value)}>
+                        <option value=''>All</option>
+                        <option value='Electronics'>Electronics</option>
+                        <option value='Fashion'>Fashion</option>
+                        <option value='Computers'>Computers</option>
+                        <option value='Furniture'>Furniture</option>
+                        <option value='Accessories'>Accessories</option>
+                        <option value='Fitness'>Fitness</option>
+                        <option value='Books'>Books</option>
+                     </select>
+
+                </div>
+               
                 <ul>
                     {
                         productList.map(eachProduct=>(
-                            <ProductCard key={eachProduct.id} productDetails={eachProduct} />
+                            <ProductCard key={eachProduct.id} productDetails={eachProduct} onViewDetails={handleViewDetails} />
                         ))
                     }    
 
                 </ul>
+                </>
             )}
             {success && <p>{success}</p>}
             {error && <p>{error}</p>}
+            
+            </>
+        )
+    }
+    return(
+        <div className="mainContainer">
+            {isLoading? (
+                <h3>Loading...</h3>
+            ):(
+                renderProducts()
+            )}
         </div>
     )
 
