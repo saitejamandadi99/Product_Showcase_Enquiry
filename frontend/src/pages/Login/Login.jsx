@@ -24,6 +24,10 @@ const Login = () => {
       setError(err.response?.data?.message || "Login failed");
       setSuccess("");
     }
+    finally{
+      setEmail('')
+      setPassword('')
+    }
   };
 
   return (

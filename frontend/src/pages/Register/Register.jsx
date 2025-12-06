@@ -23,13 +23,19 @@ const Register = () => {
       const url = `${process.env.REACT_APP_API_URL}/api/auth/register`;
       const res = await axios.post(url, form);
 
-      setSuccess(res.data.message || "Registration successful!");
+      setSuccess(res.data.message || "Registration successful!, Please Login");
       setError("");
-
-      // Backend does NOT return token → do not login automatically
     } catch (err) {
       setError(err.response?.data?.message || "Failed to register");
       setSuccess("");
+    }
+    finally{
+     setForm({
+      name: "",
+      email: "",
+      phone_no: "",
+      password: "",
+  });
     }
   };
 
@@ -46,18 +52,21 @@ const Register = () => {
           placeholder="Name"
           required
           onChange={handleChange}
+          value={form.name}
         />
         <input
           name="email"
           placeholder="Email"
           required
           onChange={handleChange}
+          value={form.email}
         />
         <input
           name="phone_no"
           placeholder="Phone"
           required
           onChange={handleChange}
+          value={form.phone_no}
         />
         <input
           type="password"
@@ -65,6 +74,7 @@ const Register = () => {
           placeholder="Password"
           required
           onChange={handleChange}
+          value={form.password}
         />
 
         <button type="submit">Register</button>
